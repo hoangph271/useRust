@@ -95,3 +95,9 @@ fn can_delete_posts() -> Result<(), bonsaidb::core::Error> {
 
     Ok(())
 }
+
+#[test]
+fn can_crud_posts () -> Result<(), bonsaidb::core::Error> {
+    // TODO: Impl
+    Ok(())
+}
