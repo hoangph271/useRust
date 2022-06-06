@@ -8,6 +8,7 @@ struct User {
     username: String,
 }
 
+#[allow(dead_code)]
 pub fn arc_mutex() {
     let user = User {
         id: 1,
