@@ -1,6 +1,7 @@
 use std::thread;
 use std::time::Duration;
 
+#[allow(dead_code)]
 pub fn thread_spawn() {
     println!("thread_spawn() start");
 
