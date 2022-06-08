@@ -1,35 +1,42 @@
 use std::sync::mpsc;
 use std::thread::{spawn, sleep};
+use std::time::Duration;
 
 #[allow(dead_code)]
 pub fn channels () {
     let (tx, rx) = mpsc::channel();
 
+    let tx_cloned = tx.clone();
+    spawn(move || {
+        let vals = vec![
+            String::from("hi"),
+            String::from("from"),
+            String::from("the"),
+            String::from("thread"),
+        ];
+
+        for val in vals {
+            tx_cloned.send(val).unwrap();
+            sleep(Duration::from_millis(265));
+        }
+    });
+
     spawn(move || {
         let mut times = 0;
 
         loop {
-            let val = String::from("Hello, there...!");
-            tx.send(val).unwrap();
+            tx.send(format!("What is UP #{times}...?")).unwrap();
 
-            times += 1;
-
-            sleep(std::time::Duration::from_millis(100));
-
-            if times == 5 {
-                println!("`tx` done all the tasks");
+            if times == 4 {
                 break
+            } else {
+                times += 1;
+                sleep(Duration::from_millis(265));
             }
         }
     });
 
-    loop {
-        match rx.recv() {
-            Ok (received) =>  println!("Got: {received}"),
-            Err (e) => {
-                println!("{}", e);
-                break
-            }
-        }
+    for received in rx {
+        println!("{received}");
     }
 }
