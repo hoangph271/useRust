@@ -1,10 +1,13 @@
+// #region // ? With tokio runtime
 mod using_tokio;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
     using_tokio::using_tokio().await;
 }
+// #endregion
 
+// #region // ? Without runtime
 // fn main() {
 //     let async_result = futures::executor::block_on(do_async());
 //     println!("{}", async_result);
@@ -19,7 +22,6 @@ async fn do_async() -> usize {
     0
 }
 
-// #region // ? Without runtime
 async fn async_task_0_0() {
     println!("async_task_0_0")
 }
