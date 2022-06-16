@@ -12,7 +12,7 @@ pub fn rw_lock() {
         let thread_id = i.clone();
 
         spawn(move || {
-            // ? This is to preven dead lock
+            // ? This is to prevent dead lock
             {
                 let mut guard = mutex_clone.write().unwrap();
                 *guard += 1;
