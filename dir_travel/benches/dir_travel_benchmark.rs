@@ -13,5 +13,17 @@ fn single_threaded_travel_benchmark(criterion: &mut Criterion) {
     });
 }
 
-criterion_group!(benches, single_threaded_travel_benchmark);
+fn multiple_threaded_travel_benchmark(criterion: &mut Criterion) {
+    criterion.bench_function("multiple_threaded_travel_benchmark", |bencher| {
+        bencher.iter(|| {
+            handlers::multiple_threaded_travel(&Path::new("."));
+        });
+    });
+}
+
+criterion_group!(
+    benches,
+    single_threaded_travel_benchmark,
+    multiple_threaded_travel_benchmark
+);
 criterion_main!(benches);
