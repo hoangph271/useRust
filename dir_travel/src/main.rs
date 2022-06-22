@@ -8,8 +8,3 @@ fn main() {
 
     println!("Total size: {total_size}");
 }
-
-// TODO: impl travel functions
-// - List out files and size
-// - List out number of skipped directories
-// - Total size in GB
