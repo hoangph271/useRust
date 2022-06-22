@@ -1,4 +1,4 @@
-#[path = "../src/handlers/handlers.rs"]
+#[path = "../src/handlers/mod.rs"]
 mod handlers;
 use criterion::{criterion_group, criterion_main, Criterion};
 use std::path::Path;
