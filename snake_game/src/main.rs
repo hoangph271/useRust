@@ -24,6 +24,7 @@ enum Direction {
     Down,
     Left,
     Right,
+    StandBy,
 }
 struct Game {
     gl: GlGraphics,
@@ -82,6 +83,7 @@ impl Snake {
             Direction::Down => self.y += 1,
             Direction::Left => self.x -= 1, // FIXME: Broke here, add wall check
             Direction::Right => self.x += 1,
+            Direction::StandBy => {},
         }
     }
 
@@ -117,12 +119,16 @@ fn main() {
         snake: Snake {
             x: 0,
             y: 0,
-            heading: Direction::Right,
+            heading: Direction::StandBy,
         },
     };
 
     let mut events = Events::new(EventSettings::new()).ups(FPS);
     while let Some(e) = events.next(&mut window) {
+        if !game.snake.is_alive() {
+            break;
+        }
+
         if let Some(args) = e.render_args() {
             game.render(&args);
         }
