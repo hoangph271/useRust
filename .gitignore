@@ -2,3 +2,4 @@
 **/target
 **/output.log
 **/node_modules
+**/._target
