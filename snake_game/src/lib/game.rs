@@ -2,8 +2,9 @@ use opengl_graphics::GlGraphics;
 use piston::input::*;
 use piston::Button;
 
-use crate::lib::constants::Direction;
+use crate::lib::shared::Direction;
 use crate::lib::snake::Snake;
+use crate::lib::colors;
 
 pub struct Game {
     pub gl: GlGraphics,
@@ -11,10 +12,8 @@ pub struct Game {
 }
 impl Game {
     pub fn render(&mut self, args: &RenderArgs) {
-        let gray: [f32; 4] = [0.6, 0.6, 0.6, 1.0];
-
         self.gl.draw(args.viewport(), |_, gl| {
-            graphics::clear(gray, gl);
+            graphics::clear(colors::GRAY, gl);
         });
 
         self.snake.render(&mut self.gl, args);

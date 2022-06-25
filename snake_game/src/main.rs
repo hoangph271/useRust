@@ -8,14 +8,13 @@ mod lib;
 
 use glutin_window::GlutinWindow;
 use opengl_graphics::{GlGraphics, OpenGL};
-// use piston::event_loop::*;
 use piston::{
     window::WindowSettings, ButtonEvent, ButtonState, EventLoop, EventSettings, Events,
     RenderEvent, UpdateEvent,
 };
 
-use lib::constants::{Direction, FPS, HEIGHT, WIDTH};
 use lib::game::Game;
+use lib::shared::{Direction, FPS, HEIGHT, WIDTH};
 use lib::snake::Snake;
 
 fn main() {
@@ -30,8 +29,7 @@ fn main() {
     let mut game = Game {
         gl: GlGraphics::new(open_gl),
         snake: Snake {
-            x: 0,
-            y: 0,
+            body: vec![(0, 0), (0, 1), (0, 2), (0, 3), (0, 4)],
             heading: Direction::StandBy,
         },
     };
