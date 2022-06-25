@@ -17,22 +17,27 @@ use lib::game::Game;
 use lib::shared::{Direction, FPS, HEIGHT, WIDTH};
 use lib::snake::Snake;
 
-fn main() {
-    let open_gl = OpenGL::V3_2;
-
-    let mut window: GlutinWindow = WindowSettings::new("Snake game...!", [WIDTH, HEIGHT])
+fn create_window(open_gl: OpenGL) -> GlutinWindow {
+    WindowSettings::new("Snake game...!", [WIDTH, HEIGHT])
         .graphics_api(open_gl)
         .exit_on_esc(true)
         .build()
-        .unwrap();
-
-    let mut game = Game {
+        .expect("create_window() failed...!")
+}
+fn create_game(open_gl: OpenGL) -> Game {
+    Game {
         gl: GlGraphics::new(open_gl),
         snake: Snake {
             body: vec![(0, 0), (0, 1), (0, 2), (0, 3), (0, 4)],
             heading: Direction::StandBy,
         },
-    };
+    }
+}
+
+fn main() {
+    let open_gl = OpenGL::V3_2;
+    let mut window = create_window(open_gl);
+    let mut game = create_game(open_gl);
 
     let mut events = Events::new(EventSettings::new()).ups(FPS);
     while let Some(e) = events.next(&mut window) {
