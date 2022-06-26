@@ -21,7 +21,7 @@ fn correct_next_head(next_head: &mut (i32, i32)) {
     }
 
     if *y < 0 {
-        *x = shared::MAX_Y;
+        *y = shared::MAX_Y;
     }
     if *y > shared::MAX_Y {
         *y = 0;
@@ -30,7 +30,7 @@ fn correct_next_head(next_head: &mut (i32, i32)) {
 
 impl Snake {
     pub fn render(&self, gl: &mut GlGraphics, args: &RenderArgs) {
-        for (x, y) in &self.body[0..self.body.len() - 1] {
+        for (x, y) in self.snake_body() {
             let square = shared::square_from_coordinates(x, y);
 
             gl.draw(args.viewport(), |c, gl| {
@@ -38,6 +38,7 @@ impl Snake {
             });
         }
 
+        println!("{:?}", self.snake_head());
         let (x, y) = self.snake_head();
         let square = shared::square_from_coordinates(x, y);
         gl.draw(args.viewport(), |c, gl| {
@@ -67,8 +68,18 @@ impl Snake {
         self.body.last().expect("PANIC! - Snake head is None")
     }
 
+    fn snake_body(&self) -> &[(i32, i32)] {
+        &self.body[0..self.body.len() - 1]
+    }
+
     pub fn is_alive(&self) -> bool {
-        // TODO: Die if the head touches its body
+        let head = self.snake_head();
+
+        for body_node in self.snake_body() {
+            if shared::are_coordinates_collide(head, body_node) {
+                return false;
+            }
+        }
 
         true
     }

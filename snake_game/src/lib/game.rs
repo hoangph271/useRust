@@ -2,9 +2,9 @@ use opengl_graphics::GlGraphics;
 use piston::input::*;
 use piston::Button;
 
+use crate::lib::colors;
 use crate::lib::shared::Direction;
 use crate::lib::snake::Snake;
-use crate::lib::colors;
 
 pub struct Game {
     pub gl: GlGraphics,
