@@ -1,4 +1,4 @@
-use crate::lib::shared::{Direction, HEIGHT, PIXEL_SIZE, WIDTH};
+use crate::lib::shared::Direction;
 use opengl_graphics::GlGraphics;
 use piston::RenderArgs;
 
@@ -8,6 +8,24 @@ use crate::lib::shared;
 pub struct Snake {
     pub body: Vec<(i32, i32)>,
     pub heading: Direction,
+}
+
+fn correct_next_head(next_head: &mut (i32, i32)) {
+    let (x, y) = next_head;
+
+    if *x < 0 {
+        *x = shared::MAX_X;
+    }
+    if *x > shared::MAX_X {
+        *x = 0;
+    }
+
+    if *y < 0 {
+        *x = shared::MAX_Y;
+    }
+    if *y > shared::MAX_Y {
+        *y = 0;
+    }
 }
 
 impl Snake {
@@ -28,16 +46,16 @@ impl Snake {
     }
 
     pub fn update(&mut self) {
-        // TODO: Wall...?
-
         let (head_x, head_y) = self.snake_head();
-        let next_head = match self.heading {
+        let mut next_head = match self.heading {
             Direction::Up => (*head_x, head_y - 1),
             Direction::Down => (*head_x, head_y + 1),
             Direction::Left => (head_x - 1, *head_y),
             Direction::Right => (head_x + 1, *head_y),
             Direction::StandBy => (*head_x, *head_y),
         };
+
+        correct_next_head(&mut next_head);
 
         if self.heading != Direction::StandBy {
             self.body.push(next_head);
@@ -50,20 +68,7 @@ impl Snake {
     }
 
     pub fn is_alive(&self) -> bool {
-        let (x, y) = self.snake_head();
-
-        if x < &0 {
-            return false;
-        }
-        if y < &0 {
-            return false;
-        }
-        if (*x as f64) * PIXEL_SIZE > (WIDTH as f64) {
-            return false;
-        }
-        if (*y as f64) * PIXEL_SIZE > (HEIGHT as f64) {
-            return false;
-        }
+        // TODO: Die if the head touches its body
 
         true
     }

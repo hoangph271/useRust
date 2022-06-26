@@ -1,7 +1,7 @@
 pub const PIXEL_SIZE: f64 = 4.0;
 pub const FPS: u64 = 60;
-pub const WIDTH: u32 = 400;
-pub const HEIGHT: u32 = 400;
+pub const MAX_X: i32 = 100;
+pub const MAX_Y: i32 = 100;
 
 #[derive(Clone, PartialEq, Eq)]
 pub enum Direction {

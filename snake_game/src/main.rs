@@ -14,15 +14,18 @@ use piston::{
 };
 
 use lib::game::Game;
-use lib::shared::{Direction, FPS, HEIGHT, WIDTH};
+use lib::shared::{Direction, FPS, MAX_X, MAX_Y, PIXEL_SIZE};
 use lib::snake::Snake;
 
 fn create_window(open_gl: OpenGL) -> GlutinWindow {
-    WindowSettings::new("Snake game...!", [WIDTH, HEIGHT])
-        .graphics_api(open_gl)
-        .exit_on_esc(true)
-        .build()
-        .expect("create_window() failed...!")
+    WindowSettings::new(
+        "Snake game...!",
+        [(MAX_X as f64) * PIXEL_SIZE, (MAX_Y as f64) * PIXEL_SIZE],
+    )
+    .graphics_api(open_gl)
+    .exit_on_esc(true)
+    .build()
+    .expect("create_window() failed...!")
 }
 fn create_game(open_gl: OpenGL) -> Game {
     Game {
