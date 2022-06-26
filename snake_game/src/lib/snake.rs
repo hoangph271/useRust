@@ -38,7 +38,6 @@ impl Snake {
             });
         }
 
-        println!("{:?}", self.snake_head());
         let (x, y) = self.snake_head();
         let square = shared::square_from_coordinates(x, y);
         gl.draw(args.viewport(), |c, gl| {
