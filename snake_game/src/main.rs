@@ -31,7 +31,10 @@ fn create_game(open_gl: OpenGL) -> Game {
     Game {
         gl: GlGraphics::new(open_gl),
         snake: Snake {
-            body: vec![(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0)],
+            body: vec![(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0)]
+                .iter()
+                .map(|tuple| tuple.into())
+                .collect(),
             heading: Direction::StandBy,
         },
     }

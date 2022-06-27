@@ -6,6 +6,8 @@ use crate::lib::colors;
 use crate::lib::shared::Direction;
 use crate::lib::snake::Snake;
 
+use super::renderer::Renderer;
+
 pub struct Game {
     pub gl: GlGraphics,
     pub snake: Snake,
@@ -16,7 +18,8 @@ impl Game {
             graphics::clear(colors::GRAY, gl);
         });
 
-        self.snake.render(&mut self.gl, args);
+        let renderer: Renderer = (&self.snake).into();
+        renderer.render(&mut self.gl, args)
     }
 
     pub fn update(&mut self) {

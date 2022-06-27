@@ -12,6 +12,21 @@ pub enum Direction {
     StandBy,
 }
 
+#[derive(Debug, Clone)]
+pub struct Point {
+    pub x: i32,
+    pub y: i32,
+}
+impl From<&(i32, i32)> for Point {
+    fn from(w: &(i32, i32)) -> Point {
+        Point { x: w.0, y: w.1 }
+    }
+}
+impl From<(i32, i32)> for Point {
+    fn from(w: (i32, i32)) -> Point {
+        Point { x: w.0, y: w.1 }
+    }
+}
 pub fn square_from_coordinates(x: &i32, y: &i32) -> [f64; 4] {
     graphics::rectangle::square(
         (*x as f64) * PIXEL_SIZE,
@@ -20,6 +35,6 @@ pub fn square_from_coordinates(x: &i32, y: &i32) -> [f64; 4] {
     )
 }
 
-pub fn are_coordinates_collide((x1, y1): &(i32, i32), (x2, y2): &(i32, i32)) -> bool {
-    x1 == x2 && y1 == y2
+pub fn are_coordinates_collide(point_1: &Point, point_2: &Point) -> bool {
+    point_1.x == point_2.x && point_1.y == point_2.y
 }

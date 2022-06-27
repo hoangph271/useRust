@@ -1,73 +1,58 @@
 use crate::lib::shared::Direction;
-use opengl_graphics::GlGraphics;
-use piston::RenderArgs;
 
 use crate::lib::colors;
 use crate::lib::shared;
 
+use super::renderer::PixelsPack;
+use super::renderer::Renderer;
+use super::shared::Point;
+
 pub struct Snake {
-    pub body: Vec<(i32, i32)>,
+    pub body: Vec<Point>,
     pub heading: Direction,
 }
 
-fn correct_next_head(next_head: &mut (i32, i32)) {
-    let (x, y) = next_head;
-
-    if *x < 0 {
-        *x = shared::MAX_X;
+fn correct_next_head(next_head: &mut Point) {
+    if next_head.x < 0 {
+        next_head.x = shared::MAX_X;
     }
-    if *x > shared::MAX_X {
-        *x = 0;
+    if next_head.x > shared::MAX_X {
+        next_head.x = 0;
     }
 
-    if *y < 0 {
-        *y = shared::MAX_Y;
+    if next_head.y < 0 {
+        next_head.y = shared::MAX_Y;
     }
-    if *y > shared::MAX_Y {
-        *y = 0;
+    if next_head.y > shared::MAX_Y {
+        next_head.y = 0;
     }
 }
 
 impl Snake {
-    pub fn render(&self, gl: &mut GlGraphics, args: &RenderArgs) {
-        for (x, y) in self.snake_body() {
-            let square = shared::square_from_coordinates(x, y);
-
-            gl.draw(args.viewport(), |c, gl| {
-                graphics::rectangle(colors::FADED_GREEN, square, c.transform, gl);
-            });
-        }
-
-        let (x, y) = self.snake_head();
-        let square = shared::square_from_coordinates(x, y);
-        gl.draw(args.viewport(), |c, gl| {
-            graphics::rectangle(colors::GREEN, square, c.transform, gl);
-        });
-    }
-
     pub fn update(&mut self) {
-        let (head_x, head_y) = self.snake_head();
-        let mut next_head = match self.heading {
-            Direction::Up => (*head_x, head_y - 1),
-            Direction::Down => (*head_x, head_y + 1),
-            Direction::Left => (head_x - 1, *head_y),
-            Direction::Right => (head_x + 1, *head_y),
-            Direction::StandBy => (*head_x, *head_y),
-        };
+        let snake_head = self.snake_head();
+        let mut next_head: Point = match self.heading {
+            Direction::Up => (snake_head.x, snake_head.y - 1),
+            Direction::Down => (snake_head.x, snake_head.y + 1),
+            Direction::Left => (snake_head.x - 1, snake_head.y),
+            Direction::Right => (snake_head.x + 1, snake_head.y),
+            Direction::StandBy => (snake_head.x, snake_head.y),
+        }
+        .into();
 
         correct_next_head(&mut next_head);
 
         if self.heading != Direction::StandBy {
-            self.body.push(next_head);
+            self.body.push(next_head.into());
             self.body.remove(0);
         }
     }
 
-    fn snake_head(&self) -> &(i32, i32) {
+    fn snake_head(&self) -> &Point {
         self.body.last().expect("PANIC! - Snake head is None")
     }
 
-    fn snake_body(&self) -> &[(i32, i32)] {
+    fn snake_body(&self) -> &[Point] {
         &self.body[0..self.body.len() - 1]
     }
 
@@ -81,5 +66,22 @@ impl Snake {
         }
 
         true
+    }
+}
+
+impl From<&Snake> for Renderer {
+    fn from(snake: &Snake) -> Renderer {
+        let head_pixels_pack = PixelsPack {
+            points: vec![snake.snake_head().clone()],
+            color: colors::GREEN,
+        };
+        let body_pixel_packs = PixelsPack {
+            color: colors::FADED_GREEN,
+            points: snake.snake_body().into(),
+        };
+
+        Renderer {
+            pixels_packs: vec![head_pixels_pack, body_pixel_packs],
+        }
     }
 }
