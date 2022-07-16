@@ -1,7 +1,7 @@
 use rand::Rng;
 use std::time::Instant;
 
-const SIZE: usize = 1_000_000;
+const SIZE: usize = 10_000;
 
 mod bubble_sort;
 
@@ -23,27 +23,30 @@ fn print_vec(vec: &Vec<usize>) {
 }
 
 fn is_vec_sorted(vec: &Vec<usize>) -> bool {
-    let i = 0;
+    let mut i = 0;
+
     loop {
+        if i == vec.len() - 1 {
+            break true;
+        }
+
         if vec[i] < vec[i + 1] {
             break false;
         }
 
-        if i == vec.len() - 1 {
-            break true;
-        }
+        i += 1;
     }
 }
 
 #[allow(dead_code)]
 fn main() {
-    let now = Instant::now();
+    let start = Instant::now();
+
     let mut nums = generate_nums(&SIZE);
 
     bubble_sort::bubble_sort(&mut nums);
 
     assert!(is_vec_sorted(&nums));
 
-    let elapsed = now.elapsed();
-    println!("Total: {:.2?}", elapsed);
+    println!("Total: {:.2?}", start.elapsed());
 }
