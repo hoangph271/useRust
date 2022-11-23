@@ -1,0 +1,6 @@
+{
+  "recommendations": [
+    "swellaby.rust-pack",
+    "tamasfe.even-better-toml"
+  ]
+}
